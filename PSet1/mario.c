@@ -1,57 +1,33 @@
 #include <stdio.h>
 #include <cs50.h>
 
-int main(void)
+int main()
 {
-    // asking a number of lines and ask again if conditions not met
-    int lines;
-
-    do
+    int num = -1;
+    while (num < 0 || num > 23)
     {
-        printf("please give me a positive integer under or egal to 23.\n");
-        lines = GetInt();
-    }
-    while(lines < 0 || lines > 23);
+        printf("Please pick an integer between 1 and 23 : ");
+        num = GetInt();
+    };
 
-    // printing the pyramid
-
-    // currently printed line
-    int current = 1;
-
-    while (current <= lines)
+    for (int i = 0 ; i < num ; i++)
     {
-        // number of spaces
-        int space = lines - current;
-        // number of hashes
-        int hash = 1;
-
-        // prints the amount of spaces for each line
-        while (space > 0)
+        for (int j = 0; j < num-i-1; j++)
         {
             printf(" ");
-            space--;
         }
 
-        // prints the amount of hashes for each line
-        while (hash <= current + 1)
+        for (int k = 0; k < i+1; k++)
         {
             printf("#");
-            hash++;
         }
 
-    	// prints the 2 spaces
-    	printf("  ");
+        printf("  ");
 
-    	// prints the second hashes
-    	hash = 1;
-    	while (hash <= current + 1)
-                {
-                    printf("#");
-                    hash++;
-                }
-    	// newline
-    	printf("\n");
-        current++;
-     }
-
+        for (int k = 0; k < i+1; k++)
+        {
+        	printf("#");
+        }
+        printf("\n");
+    }
 }
