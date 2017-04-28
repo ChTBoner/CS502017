@@ -194,12 +194,12 @@ void init(void)
 void draw(void)
 {
     // TODO
+    int value = d*d-1;
     for (int row = 0; row < d; row++)
     {
         for (int col = 0; col < d; col++)
         {
             printf("%2i ", value);
-        }
 
             value--;
         }
@@ -214,6 +214,9 @@ void draw(void)
 bool move(int tile)
 {
     // TODO
+    // parse the game to find the empty tile and th tile to move
+    int value = 0
+    for 
     return false;
 }
 
