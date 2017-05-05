@@ -194,12 +194,12 @@ void init(void)
 void draw(void)
 {
     // TODO
+    int value = d*d-1;
     for (int row = 0; row < d; row++)
     {
         for (int col = 0; col < d; col++)
         {
             printf("%2i ", value);
-        }
 
             value--;
         }
@@ -214,6 +214,32 @@ void draw(void)
 bool move(int tile)
 {
     // TODO
+    // parse the game to find the empty tile and the tile to move
+   // int value = d*d -1;
+   // int toMove[2];
+   // int emptyTile[2];
+   // int parsedTile[1][1];
+   // for (int row = 0; row > d;  row++)
+   // {
+   //     for (int col = 0; col > d; col++)
+   //     {
+   //         // if find tile, set tile to move position
+   //         if (parsedTile[row][col] == tile)
+   //         {
+   //     	    toMove[0] = row;
+   //     	    toMove[1] = col;
+   //         }
+
+   //         if (parsedTile[row][col] == )
+   //         {
+   //             emptyTile[0] = row;
+   //             emptyTile[1] = col;
+   //         }
+
+   //         printf("toMove = %i pos\(%i, %i \)\n", board[toMove[0]][toMove[1]], toMove[O], toMove[1]);
+   //         printf( "emptyTile pos\(%i, %i\)\n", emptyTile[0], emptyTile[1] );
+   //     }
+   // }
     return false;
 }
 
