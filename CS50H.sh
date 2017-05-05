@@ -1,7 +1,7 @@
 #sudo su -
 #yum -y install gcc  # Fedora, RedHat, CentOS
 # apt-get install gcc  # Debian, Ubuntu, Mint
-#wget http://mirror.cs50.net/library50/c/library50-c-5.zip
+wget http://mirror.cs50.net/library50/c/library50-c-5.zip
 unzip library50-c-5.zip
 rm -f library50-c-5.zip
 cd library50-c-5
