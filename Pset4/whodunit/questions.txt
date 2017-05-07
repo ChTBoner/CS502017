@@ -1,12 +1,12 @@
-1.  TODO
-2.  TODO
-3.  TODO
-4.  TODO
-5.  TODO
-6.  TODO
-7.  TODO
-8.  TODO
-9.  TODO
-10. TODO
-11. TODO
-12. TODO
+1.  it is a library that proposes other sizes of integers.
+2.  to limit size memory size of variables
+3.  1 4 4 2
+4.  0x424d
+5.  bfSize is the size of the file, biSize is the size of the header of the file
+6.  the beginnig of the image is printed from top to bottom, left to right.
+7.  biBitCount
+8.  there might be not enough RAM left to store the file.
+9.  because we read one RGBTRIPLE at a time.
+10. 0
+11. it moves the position of the "cursor" a certain number of bytes.
+12. it tells the function to start from the current position in memory.
