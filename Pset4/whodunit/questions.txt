@@ -7,6 +7,6 @@
 7.  biBitCount
 8.  there might be not enough RAM left to store the file.
 9.  because we read one RGBTRIPLE at a time.
-10. 0
+10. 3
 11. it moves the position of the "cursor" a certain number of bytes.
 12. it tells the function to start from the current position in memory.
