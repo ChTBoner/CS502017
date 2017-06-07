@@ -12,12 +12,9 @@ int main(int argc, char *argv[])
     // ensure proper usage
     if (argc != 4)
     {
-        fprintf(stderr, "Usage: ./resize f infile outfile\n");
+        fprintf(stderr, "Usage: ./resize n infile outfile\n");
         return 1;
     }
-
-    // if check if value is float.
-    sscanf();
 
     // remember filenames
     char *infile = argv[2];
@@ -60,8 +57,7 @@ int main(int argc, char *argv[])
 
     int factor = atof(argv[1]);
 
-    // write outfile's BITMAPFILEHEADER
-    fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
+	int paddingOld = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
     // change info in headers
     /*
@@ -74,13 +70,24 @@ int main(int argc, char *argv[])
     BITMAPFILEHEADER
     bf.bfSize = bi.biSizeImage + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)
     */
+	
+	bi.biWidth = bi.biWidth * factor;
+	bi.biHeight = bi.biHeight * factor;
+	int padding = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+
+	bi.biSizeImage = ((sizeof(RGBTRIPLE)*bi.biWidth) + padding * abs(bi.biHeight));
+	bf.bfSize = bi.biSizeImage + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+	// write outfile's BITMAPFILEHEADER
+	fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
 
     // write outfile's BITMAPINFOHEADER
     fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
     // determine padding for scanlines
-    int padding = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
-
+   
+	int *line = NULL;
+	line = malloc(sizeof(BYTE)*padding + sizeof(RGBTRIPLE)*bi.biWidth);
     // iterate over infile's scanlines
     for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
     {
@@ -94,21 +101,30 @@ int main(int argc, char *argv[])
             fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
 
             // write RGB triple to outfile
-            // changed 1 to
-            fwrite(&triple, sizeof(RGBTRIPLE), factor, outptr);
+            // changed 1 to factor
+			fwrite(&triple, sizeof(RGBTRIPLE), factor, outptr);
+		
         }
 
         // skip over padding, if any
-        fseek(inptr, padding, SEEK_CUR);
+        fseek(inptr, paddingOld, SEEK_CUR);
 
         // write correct padding for new image
 
         // then add it back (to demonstrate how)
-        for (int k = 0; k < padding; k++)
-        {
-            fputc(0x00, outptr);
-        }
+		for (int k = 0; k < padding; k++)
+		{
+			fputc(0x00, outptr);
+		}
+
+		//copy line n times
+		// move the cursor in outptr to beginning of new line, read the line and write
+		fseek(outptr, -sizeof(line), SEEK_CUR);
+		fread(&line, sizeof(line), 1, outptr);
+		fwrite(&line, sizeof(line), factor - 1, outptr);
+		
     }
+	free(line);
 
     // close infile
     fclose(inptr);
