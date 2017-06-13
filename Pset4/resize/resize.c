@@ -59,6 +59,17 @@ int main(int argc, char *argv[])
 
 	int paddingOld = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
+	// saving height and width before resize.
+	// int heightBR = abs(bi.biHeight);
+	int widthBR = bi.biWidth;
+
+	// print before factor
+	printf("biWidth = %i\n", bi.biWidth);
+	printf("biHeight = %i\n", bi.biHeight);
+	printf("biSizeImage = %i\n", bi.biSizeImage);
+	printf("bf.bfSize = %i\n", bf.bfSize);
+	printf("padding = %i\n", paddingOld);
+
     // change info in headers
     /*
     BITMAPINFOHEADER
@@ -75,8 +86,15 @@ int main(int argc, char *argv[])
 	bi.biHeight = bi.biHeight * factor;
 	int padding = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
-	bi.biSizeImage = ((sizeof(RGBTRIPLE)*bi.biWidth) + padding * abs(bi.biHeight));
+	bi.biSizeImage = ((sizeof(RGBTRIPLE)*bi.biWidth) + padding) * abs(bi.biHeight);
 	bf.bfSize = bi.biSizeImage + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+	// print after factor
+	printf("\nbiWidth = %i\n", bi.biWidth);
+	printf("biHeight = %i\n", bi.biHeight);
+	printf("biSizeImage = %i\n", bi.biSizeImage);
+	printf("bf.bfSize = %i\n", bf.bfSize);
+	printf("padding = %i\n", padding);
 
 	// write outfile's BITMAPFILEHEADER
 	fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
@@ -87,12 +105,13 @@ int main(int argc, char *argv[])
     // determine padding for scanlines
    
 	int *line = NULL;
-	line = malloc(sizeof(BYTE)*padding + sizeof(RGBTRIPLE)*bi.biWidth);
+	line = malloc(padding + sizeof(RGBTRIPLE)*bi.biWidth);
+	printf("size line = %lu\n", sizeof(line));
     // iterate over infile's scanlines
     for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
     {
         // iterate over pixels in scanline
-        for (int j = 0; j < bi.biWidth; j++)
+        for (int j = 0; j < widthBR; j++)
         {
             // temporary storage
             RGBTRIPLE triple;
@@ -102,7 +121,8 @@ int main(int argc, char *argv[])
 
             // write RGB triple to outfile
             // changed 1 to factor
-			fwrite(&triple, sizeof(RGBTRIPLE), factor, outptr);
+			for (int m = 0; m < factor; m++)
+				fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
 		
         }
 
@@ -121,7 +141,8 @@ int main(int argc, char *argv[])
 		// move the cursor in outptr to beginning of new line, read the line and write
 		fseek(outptr, -sizeof(line), SEEK_CUR);
 		fread(&line, sizeof(line), 1, outptr);
-		fwrite(&line, sizeof(line), factor - 1, outptr);
+		for (int m = 0; m < factor; m++)
+			fwrite(&line, sizeof(line), 1, outptr);
 		
     }
 	free(line);
