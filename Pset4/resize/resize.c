@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	int paddingOld = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
 	// saving height and width before resize.
-	// int heightBR = abs(bi.biHeight);
+	int heightBR = abs(bi.biHeight);
 	int widthBR = bi.biWidth;
 
 	// print before factor
@@ -103,12 +103,10 @@ int main(int argc, char *argv[])
     fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
     // determine padding for scanlines
-   
-	int *line = NULL;
-	line = malloc(padding + sizeof(RGBTRIPLE)*bi.biWidth);
-	printf("size line = %lu\n", sizeof(line));
+	printf("%lu\n", padding + sizeof(RGBTRIPLE)*bi.biWidth);
+
     // iterate over infile's scanlines
-    for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
+    for (int i = 0; i < heightBR ; i++)
     {
         // iterate over pixels in scanline
         for (int j = 0; j < widthBR; j++)
@@ -129,8 +127,6 @@ int main(int argc, char *argv[])
         // skip over padding, if any
         fseek(inptr, paddingOld, SEEK_CUR);
 
-        // write correct padding for new image
-
         // then add it back (to demonstrate how)
 		for (int k = 0; k < padding; k++)
 		{
@@ -139,13 +135,20 @@ int main(int argc, char *argv[])
 
 		//copy line n times
 		// move the cursor in outptr to beginning of new line, read the line and write
-		fseek(outptr, -sizeof(line), SEEK_CUR);
-		fread(&line, sizeof(line), 1, outptr);
-		for (int m = 0; m < factor; m++)
-			fwrite(&line, sizeof(line), 1, outptr);
-		
+		int *line = NULL;
+		line = (int *) malloc(sizeof(BYTE)*padding + sizeof(RGBTRIPLE)*bi.biWidth);
+		printf("line = %lu", sizeof(*line));
+
+		fseek(outptr, -(sizeof(BYTE)*padding + sizeof(RGBTRIPLE)*bi.biWidth), SEEK_CUR);
+		fread(line, sizeof(BYTE)*padding + sizeof(RGBTRIPLE)*bi.biWidth, 1, outptr);
+		printf("line = %i", line);
+		for (int m = 0; m < factor-1; m++)
+			fwrite(line, sizeof(BYTE)*padding + sizeof(RGBTRIPLE)*bi.biWidth, 1, outptr);
+
+		free(line);
+		printf("\n");
     }
-	free(line);
+	
 
     // close infile
     fclose(inptr);
