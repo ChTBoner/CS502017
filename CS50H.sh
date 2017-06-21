@@ -1,5 +1,9 @@
 #sudo su -
-#yum -y install gcc  # Fedora, RedHat, CentOS
+# TODO : 
+# - check if run with sudo
+# - check if run on Debian or Redhat distros (add Arch? Gentoo?)
+
+# yum -y install gcc  # Fedora, RedHat, CentOS
 # apt-get install gcc  # Debian, Ubuntu, Mint
 wget http://mirror.cs50.net/library50/c/library50-c-5.zip
 unzip library50-c-5.zip
