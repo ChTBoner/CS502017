@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
     // iterate over infile's scanlines
     for (int i = 0; i < heightBR ; i++)
     {
+        line[widthBR] = [];
         // iterate over pixels in scanline
         for (int j = 0; j < widthBR; j++)
         {
@@ -116,7 +117,9 @@ int main(int argc, char *argv[])
 
             // read RGB triple from infile
             fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
-
+            
+            line[j] = triple;
+            
             // write RGB triple to outfile
             // changed 1 to factor
 			for (int m = 0; m < factor; m++)
@@ -132,10 +135,12 @@ int main(int argc, char *argv[])
 		{
 			fputc(0x00, outptr);
 		}
+		
+		
 
 		//copy line n times
 		// move the cursor in outptr to beginning of new line, read the line and write
-		int *line = NULL;
+		/*int *line = NULL;
 		line = (int *) malloc(sizeof(BYTE)*padding + sizeof(RGBTRIPLE)*bi.biWidth);
 		printf("line = %lu", sizeof(*line));
 
@@ -146,7 +151,7 @@ int main(int argc, char *argv[])
 			fwrite(line, sizeof(BYTE)*padding + sizeof(RGBTRIPLE)*bi.biWidth, 1, outptr);
 
 		free(line);
-		printf("\n");
+		printf("\n");*/
     }
 	
 
