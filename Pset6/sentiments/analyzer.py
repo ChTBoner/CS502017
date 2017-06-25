@@ -33,7 +33,6 @@ class Analyzer():
             if token.lower() in self.pos_words:
                 score += 1
             elif token.lower() in self.neg_words:
-                print(token)
                 score -= 1
 
         return score
