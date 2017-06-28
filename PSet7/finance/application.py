@@ -1,4 +1,5 @@
-from cs50 import SQL
+import sqlite3
+#from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from passlib.apps import custom_app_context as pwd_context
@@ -18,7 +19,7 @@ if app.config["DEBUG"]:
         response.headers["Pragma"] = "no-cache"
         return response
 
-# custom filter
+# custom filter = facilitate print values in USD
 app.jinja_env.filters["usd"] = usd
 
 # configure session to use filesystem (instead of signed cookies)
@@ -28,7 +29,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # configure CS50 Library to use SQLite database
-db = SQL("sqlite:///finance.db")
+#db = SQL("sqlite:///finance.db")
+db = sqlite3.connect("finance.db")
 
 @app.route("/")
 @login_required
