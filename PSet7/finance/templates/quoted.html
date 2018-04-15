@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote results
+{% endblock %}
+
+{% block main %}
+    <table style="width:75%; text-align: center;">
+        <tr>
+            <td>{{ symbol }}</td>
+            <td>{{ name }}</td>
+            <td>{{ price }}</td>
+        </tr>
+    </table>
+{% endblock %}
